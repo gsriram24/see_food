@@ -36,7 +36,9 @@ class _MyHomePageState extends State<MyHomePage> {
       maxHeight: 256,
       maxWidth: 256,
     );
-
+    if (_image == null) {
+      return;
+    }
     setState(() {
       _image = image;
     });
@@ -49,7 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
       maxHeight: 256,
       maxWidth: 256,
     );
-
+    if (_image == null) {
+      return;
+    }
     setState(() {
       _image = image;
     });
