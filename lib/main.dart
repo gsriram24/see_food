@@ -45,13 +45,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future predictOnImage() async {
     var recognitions = await Tflite.runModelOnImage(
-        path: _image.path, // required
-        imageMean: 0.0, // defaults to 117.0
-        imageStd: 255.0, // defaults to 1.0
-        numResults: 2, // defaults to 5
-        threshold: 0.2, // defaults to 0.1
-        asynch: true // defaults to true
-        );
+      path: _image.path, // required
+      imageMean: 0.0, // defaults to 117.0
+      imageStd: 255.0, // defaults to 1.0
+      numResults: 2, // defaults to 5
+      threshold: 0.2, // defaults to 0.1
+      asynch: true, // defaults to true
+    );
     print(recognitions);
     setState(() {
       predictedLabel = recognitions[0]['label'];
@@ -61,10 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Future loadModel() async {
     Tflite.close();
     String res = await Tflite.loadModel(
-        model: "assets/model.tflite",
-        labels: "assets/labels.txt",
-        numThreads: 1 // defaults to 1
-        );
+      model: "assets/model.tflite",
+      labels: "assets/labels.txt",
+      numThreads: 1, // defaults to 1
+    );
     print(res);
   }
 
