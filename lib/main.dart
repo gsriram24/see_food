@@ -30,9 +30,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   File _image;
   String predictedLabel;
-  Future getImage() async {
+  Future getImageFromCamera() async {
     var image = await ImagePicker.pickImage(
       source: ImageSource.camera,
+      maxHeight: 256,
+      maxWidth: 256,
+    );
+
+    setState(() {
+      _image = image;
+    });
+    predictOnImage();
+  }
+
+  Future getImageFromGallery() async {
+    var image = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
       maxHeight: 256,
       maxWidth: 256,
     );
@@ -88,17 +101,27 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'Food predicted: $predictedLabel',
               style: TextStyle(
-                fontSize: 36,
+                fontSize: 28,
               ),
             ),
             _image == null ? Text('No image selected.') : Image.file(_image),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                FloatingActionButton(
+                  onPressed: getImageFromCamera,
+                  tooltip: 'Pick Image',
+                  child: Icon(Icons.camera),
+                ),
+                FloatingActionButton(
+                  onPressed: getImageFromGallery,
+                  tooltip: 'Pick Image',
+                  child: Icon(Icons.image),
+                ),
+              ],
+            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: getImage,
-        tooltip: 'Pick Image',
-        child: Icon(Icons.add_a_photo),
       ),
     );
   }
