@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:tflite/tflite.dart';
-
+import 'package:see_food/screens/meal_detail_screen.dart';
 import 'screens/upload_image_screen.dart';
 
 void main() {
@@ -16,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SeeFood',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        primarySwatch: Colors.deepOrange,
         accentColor: Colors.amber,
         canvasColor: Color.fromRGBO(255, 254, 229, 1),
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -35,6 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (_) => MyHomePage(),
+        MealDetailScreen.routeName: (_) => MealDetailScreen(),
       },
     );
   }

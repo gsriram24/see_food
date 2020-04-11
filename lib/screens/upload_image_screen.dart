@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
+import 'meal_detail_screen.dart';
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -23,7 +25,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _image = image;
     });
-    predictOnImage();
   }
 
   Future getImageFromGallery() async {
@@ -38,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _image = image;
     });
-    predictOnImage();
   }
 
   Future predictOnImage() async {
@@ -54,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       predictedLabel = recognitions[0]['label'];
     });
+    Navigator.of(context).pushNamed(MealDetailScreen.routeName,
+        arguments: recognitions[0]['index']);
   }
 
   Future loadModel() async {
@@ -80,31 +82,95 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Food predicted: $predictedLabel',
-              style: TextStyle(
-                fontSize: 28,
+            Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
               ),
+              elevation: 5,
+              margin: EdgeInsets.all(50),
+              child: _image == null
+                  ? Container(
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      child: Center(
+                        child: Text(
+                          'No image selected.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Image.file(
+                      _image,
+                      alignment: Alignment.center,
+                      fit: BoxFit.contain,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                    ),
             ),
-            _image == null ? Text('No image selected.') : Image.file(_image),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                FloatingActionButton(
+                RaisedButton.icon(
                   onPressed: getImageFromCamera,
-                  tooltip: 'Pick Image',
-                  child: Icon(Icons.camera),
+                  elevation: 7,
+                  icon: Icon(Icons.camera),
+                  label: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+                    child: Text(
+                      'Open Camera',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  textColor: Colors.white,
+                  color: Colors.redAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(30.0),
+                  ),
                 ),
-                FloatingActionButton(
+                RaisedButton.icon(
                   onPressed: getImageFromGallery,
-                  tooltip: 'Pick Image',
-                  child: Icon(Icons.image),
+                  elevation: 7,
+                  icon: Icon(Icons.image),
+                  label: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+                    child: Text(
+                      'Open Gallery',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  textColor: Colors.white,
+                  color: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(30.0),
+                  ),
                 ),
               ],
             ),
+            RaisedButton.icon(
+              onPressed: predictOnImage,
+              icon: Icon(Icons.remove_red_eye),
+              label: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                child: Text('See Food!',
+                    style: TextStyle(
+                      fontSize: 19,
+                    )),
+              ),
+              elevation: 7,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              color: Theme.of(context).accentColor,
+            )
           ],
         ),
       ),
